@@ -1,0 +1,73 @@
+<div class="container mx-auto px-4 py-8">
+  <div class="max-w-4xl mx-auto">
+    <!-- Page Header -->
+    <div class="text-center mb-12">
+      <h1 class="text-4xl font-bold text-gray-900 mb-4">Scientific Blog</h1>
+      <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+        Thoughts, insights, and discussions about my research and the broader scientific community.
+      </p>
+    </div>
+
+    <!-- Blog Posts -->
+    <%= if length(@posts) > 0 do %>
+      <div class="space-y-8">
+        <%= for post <- @posts do %>
+          <article class="bg-white border border-gray-200 rounded-lg p-8 shadow-sm hover:shadow-md transition-shadow">
+            <div class="flex items-center text-sm text-gray-500 mb-4">
+              <time datetime={post.published_at}>
+                <%= format_date(post.published_at) %>
+              </time>
+              <span class="mx-2">•</span>
+              <span><%= reading_time(post.content) %></span>
+              <%= if post.author do %>
+                <span class="mx-2">•</span>
+                <span>by <%= post.author %></span>
+              <% end %>
+            </div>
+
+            <h2 class="text-2xl font-bold text-gray-900 mb-4">
+              <a href={~p"/blog/#{post.slug}"} class="hover:text-blue-600 transition-colors">
+                <%= post.title %>
+              </a>
+            </h2>
+
+            <%= if post.excerpt do %>
+              <p class="text-gray-700 mb-4 leading-relaxed">
+                <%= post.excerpt %>
+              </p>
+            <% end %>
+
+            <div class="flex items-center justify-between">
+              <a href={~p"/blog/#{post.slug}"} 
+                 class="inline-flex items-center text-blue-600 hover:text-blue-800 font-medium">
+                Read more
+                <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                </svg>
+              </a>
+
+              <%= if post.tags && post.tags != "" do %>
+                <div class="flex flex-wrap gap-2">
+                  <%= for tag <- String.split(post.tags, ",") do %>
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                      <%= String.trim(tag) %>
+                    </span>
+                  <% end %>
+                </div>
+              <% end %>
+            </div>
+          </article>
+        <% end %>
+      </div>
+    <% else %>
+      <!-- Empty State -->
+      <div class="text-center py-12">
+        <div class="text-gray-400 text-6xl mb-4">✍️</div>
+        <h3 class="text-xl font-medium text-gray-900 mb-2">No blog posts yet</h3>
+        <p class="text-gray-600">
+          Check back soon for insights and discussions about ongoing research and scientific topics.
+        </p>
+      </div>
+    <% end %>
+  </div>
+</div>
